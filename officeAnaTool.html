@@ -1,0 +1,1541 @@
+<html>
+    <body style="
+        background-color: #d6f2ff;
+        ">
+        <!-- tools bar -->
+        <div style="
+        width: 200px;
+        height: 100%;
+        background-color: #004e75;
+        margin: 5px;
+        border-radius: 5px;
+        position: relative;
+        float: left;
+        z-index: 1;
+        ">
+            <div><p style="
+                text-align: center;
+                font-size: x-large;
+                padding-top: 0px;
+                color: white;
+                border-bottom:solid 2px
+                ">Office file Analyse</p></div>
+            <div style="margin: 5px;padding-top: 5px;text-align:center;z-index: 1;">
+                <p style="color: white">This tools for anaylyse Compound-File binary file.</p>
+                <div>
+                    <input id="fileUploadInput" type="file" style="display: none;"onchange="uploadFile()">
+                    <button style="z-index: 2;" onclick="document.getElementById('fileUploadInput').click();">
+                Select a file
+                    </button>                    
+                </div>
+            </div>
+            <div style="border: solid 1px;border-color:white;margin: 5px;">
+                <p style="text-align: center;color:white;border-bottom: solid 1px;">Reference Table</p>
+                <table style="font-size: small">
+                    <tbody>
+                        <tr>
+                            <th style="border-bottom: solid 1px;color:white;">DirectoryName</th>
+                            <th style="border-bottom: solid 1px;color:white;">info</th>
+                        </tr>
+                        <tr>
+                            <td>WordDocument</td><td>contains the document text</td>
+                        </tr>     
+                        <tr>
+                            <td>1Table or 0Table</td><td>EncryptionHeader And Other</td>
+                        </tr>
+                        <tr>
+                            <td>Data</td><td>--</td>
+                        </tr>    
+                        <tr>
+                            <td>ObjectPool</td><td>Storages for embedded OLE objects</td>
+                        </tr>
+                        <tr>
+                            <td>ObjInfo</td><td>ObjectPool element info</td>
+                        </tr> 
+                        <tr>
+                            <td>Print</td><td>MFPF</td>
+                        </tr>
+                        <tr>
+                            <td>EPrint</td><td>Metafile, used when printing the object</td>
+                        </tr>
+                        <tr>
+                            <td>MsoDataStore</td><td>Custom XML</td>
+                        </tr>
+                        <tr>
+                            <td>Summary Information</td><td>--</td>
+                        </tr>
+                        <tr>
+                            <td>Document Summary Information</td><td>--</td>
+                        </tr>
+                        <tr>
+                            <td>Encryption</td><td>--</td>
+                        </tr>
+                        <tr>
+                            <td>Macros</td><td>Macros</td>
+                        </tr>
+                        <tr>
+                            <td>XML Signatures</td><td>Digital Signatures</td>
+                        </tr>
+                        <tr>
+                            <td>Signatures</td><td>Signatures</td>
+                        </tr>
+                        <tr>
+                            <td>Information Rights Management Data Space</td><td>--</td>
+                        </tr>
+                        <tr>
+                            <td>Protected Content</td><td>--</td>
+                        </tr>
+                    </tbody> 
+                    <style>
+                        table td{
+                            color:white;
+                            border-bottom: solid 1px;
+                        }
+                    </style>               
+                </table>
+            </div>
+        </div>
+        <!-- info display -->
+        <div style="
+        position: relative;
+        height: 100%;
+        margin: 5px;
+        z-index: 0;
+        ">
+            <!-- directory entry -->
+            <div>
+                <div style="
+                background-color: #415c73;
+                display: inline-block;
+                padding: 15;
+                border-radius: 10px;
+                ">
+                    <div style="
+                    padding: 10px;
+                    width: 500px;
+                    background-color:#50c8fc;
+                    border-radius:5px;
+                    float: left;
+                    margin: 0 10 0 10;
+                    ">
+                        <div><p style="
+                            font-size: x-large;
+                            margin-top: 5px;
+                            margin-bottom: 0;
+                            ">File structurs</p>
+                            <p style="margin: 0;">click element view entiry details</p></div>
+                        <div style="
+                        min-height: 300px;">
+                            <div id="structur_view" style="                    
+                            background-color: white;
+                            border-radius: 10px;
+                            padding: 25px;
+                            ">
+                            <a>Please upload file.</a>
+                            </div>
+                        </div>                    
+                    </div>
+                    <div style="
+                    padding: 10px;
+                    width: 500px;
+                    background-color:#50c8fc;
+                    border-radius:5px;
+                    float: left;
+                    margin: 0 10 0 10;
+                    ">
+                        <div><p style="
+                            font-size: x-large;
+                            margin-top: 5px;
+                            ">Directory entiry info</p></div>
+                        <div id="directoryEntiry_view" style="
+                        min-height: 300px;
+                        ">
+                        <table style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <th style="width: 50%;min-width: 150px;">Property</th>
+                                    <th style="width: 50%;min-width: 150px;">Value</th>
+                                </tr>
+                                <tr>
+                                    <td>seq</td><td id="Entiry_seq"></td>
+                                </tr>
+                                <tr>
+                                    <td>Name</td><td id="Entiry_name"></td>
+                                </tr>
+                                <tr>
+                                    <td>Name-length</td><td id="Entiry_name_length"></td>
+                                </tr>
+                                <tr>
+                                    <td>Type</td><td id="Entiry_type"></td>
+                                </tr>
+                                <tr>
+                                    <td>DataSize</td><td id="Entiry_data_size"></td>
+                                </tr>
+                                <tr>
+                                    <td>CreateTime</td><td id="Entiry_create_time"></td>
+                                </tr>
+                                <tr>
+                                    <td>ModifiedTime</td><td id="Entiry_modified_time"></td>
+                                </tr>
+                                <tr>
+                                    <td>DataLocation</td><td id="Entiry_data_location"></td>
+                                </tr>
+                                <tr>
+                                    <td>DataStratingLocation</td><td id="Entiry_data_starting"></td>
+                                </tr>
+                            </tbody>
+                            
+                        </table>
+                        <style>
+                            table tbody th {
+                                border-color: white;
+                                
+                                border-bottom: solid 1px;
+                            }
+                            table tbody td {
+                                border-color: white;                            
+                                border-bottom: solid 1px;
+                            }
+                        </style>
+                            <p style="margin-top: 5px;margin-bottom: 0px;">Open console and coding javascript for andvance analyse.</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px;">Js variable name directoryEleArray (array object).</p>
+                            <p style="margin-top: 0px;margin-bottom: 0px;">Use function <a style="color:crimson">readDataFromFileSector(directoryEleArray[X])<a> extract data from file.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- OVBN project info and document -->
+            <div style="
+            background-color: #415c73;
+            display: inline-block;
+            padding: 15;
+            border-radius: 10px;
+            margin-top: 10px;
+            ">
+            <div style="height: 50px;color: white;">
+                <div id="menu" style="display: inline-block;margin-top: 10px;height: 50px;">
+                    <div id="menu_OVBAINFO" style="float: left;height: 50px;border-radius: 5px 5px 0px 0px;background-color: white;color: black;">
+                        <a onclick="switchMenu('menu_OVBAINFO')" style="padding: 10px;display: inline-block;">OVBA INFO</a>
+                    </div>
+                    <div id="menu_DOCINFO" style="float: left;height: 50px;border-radius: 5px 5px 0px 0px;">
+                        <a onclick="switchMenu('menu_DOCINFO')"  style="padding: 10px;display: inline-block;">DOCUMENT INFO</a>
+                    </div>
+                </div>
+            </div>
+            <script>
+                function switchMenu(data){
+                    var eleMenu = document.getElementById("menu").children;
+                    for(var index=0;index<eleMenu.length;index++){
+                        eleMenu[index].style.removeProperty("background-color");
+                        eleMenu[index].style.removeProperty("color");
+                    }
+                    var eleMenu = document.getElementById("menu_displayInfoDiv").children;
+                    for(var index=0;index<eleMenu.length;index++){
+                        eleMenu[index].style.display="none";                        
+                    }
+                    document.getElementById(data).style.setProperty("background-color","white");
+                    document.getElementById(data).style.setProperty("color","black");
+                    switch(data){
+                        case "menu_OVBAINFO":
+                            menu_OVBAINFO();
+                            break;
+                        case "menu_DOCINFO":
+                            menu_DOCINFO();
+                            break;
+                    }
+                }
+
+                function menu_DOCINFO(){
+                    document.getElementById("docuemnt info").style.removeProperty("display");
+                }
+                function menu_OVBAINFO(){
+                    document.getElementById("module_array").style.removeProperty("display");
+                }
+
+            </script>            
+            <div id="menu_displayInfoDiv" style="
+                width: 1080px;
+                background-color: white;
+                border-radius:5px;
+                float: left;
+                padding-top: 15px;
+                ">
+                <div id="module_array">
+                <div style="margin-left:10px;margin-right: 10px;width: 200px;float: left;">
+                    <a>Module Select</a>
+                    <select id="module_array_select" style="width:180px ;" multiple="1" onchange="fun_select_module()" >
+                        <option>Macros1</option>
+                        <option>Macros2</option>
+                    </select>
+                </div>
+                <div style="height: 300px; width:750px;display: inline-block;margin: 10px;">
+                    <div><a>SourceCode</a></div>
+                    <div><textarea id="sourceCodeTextAres" style="width:100%;height: 80%;">code here</textarea></div>
+                </div>
+                </div>
+                <script>
+                    var module_array = null;
+                    function fun_select_module(){
+                        var seleTools =  document.getElementById("module_array_select").value;
+                        var compressedSourceCode = moduleInfo[seleTools].data;
+                        var decompressedSourceCode = decompressing(compressedSourceCode);
+                        var stringSourceCode = charCodeArrayToString(decompressedSourceCode,0,decompressedSourceCode.length);
+                        document.getElementById("sourceCodeTextAres").value = stringSourceCode;
+                    }
+                </script>
+                <div id="docuemnt info" >
+
+                </div>
+            </div>
+        </div>
+        
+    <!-- analyse code -->
+    <script>
+
+        function callBack_afterParseFile(){
+            fileAnalyse(OhexArray);
+            displayDirectryTree(directoryEleArray);
+            decompressOVBAdirStreamAndPrease(directoryEleArray);
+            displayMoudles();
+        }
+
+        // store file hex info OhexArray[fileSize/32][32]
+        var OhexArray=[];
+        var version = ""
+        var sectorSize=0;
+        var size_directorySector = 0;
+        var size_FATSector = 0;
+        var location_SectorNumber_firstDirecty = 0;
+        var size_DIFATSector = 0;
+        var location_SectorNumber_firstDIFAT = 0;
+        var miniStreamCutOffSize = 0;
+        var firstMiniFATSectorLocation = 0;
+        var miniFATSectorSize = 0;
+        var hexDirectorySectorSize ="0x";
+        var hexFATSectorSize ="0x";
+        var hexFirstDirectorySectorLocationNumber ="0x";
+        var hexLocationFirstDIFATSector = "0x";
+        var hexSizeOfDIFATSector = "0x";
+        var hexMiniStreamCutOffSize = "0x";
+        var hexfirstMiniFATSectorLocation = "0x";
+        var hexminiFATSectorSize = "0x";
+        //  store FAT sector location
+        var DIFATINFO=[];
+        //  store sector link info
+        var FATEleArray = [];
+        //  store direcxtory section info
+        var directorySector=[];
+        //  store directoryEntiry
+        var directoryEleArray = [];
+        //  mini FAT
+        var miniFATEleArray=[];
+        //  store module info
+        var moduleInfo = [];
+
+
+        function uploadFile() {
+        let fileReader = new FileReader();
+        var fileData;
+        var fileUploadElement = document.getElementById("fileUploadInput");
+        fileData = fileUploadElement.files[0];
+        fileReader.readAsDataURL(fileData);
+        fileReader.onloadend = function () {
+            var rawFile = fileReader.result;
+            var base64Data = extracrtRawData(rawFile);
+            rawFileToHexArray(base64Data);
+            callBack_afterParseFile();
+            };
+        }
+        function extracrtRawData(base64RawData){
+            var rawSplit = base64RawData.split("base64,");
+            if(2==rawSplit.length)
+                return atob(rawSplit[1]);
+            else
+                return null;
+        }
+
+        function charToHex(charLitter){
+            return "0x"+charLitter.toString(16);
+        }
+        
+        function rawFileToHexArray(rawData){
+            var singleRow=[];
+            for(var item=0,row=0,seq=0;item<rawData.length;item++){
+                singleRow[seq]=rawData.charCodeAt(item);
+                if(0!=seq&&seq%31==0){
+                    OhexArray[row]=singleRow;
+                    singleRow=[];
+                    row++;        
+                    seq=0;
+                    continue;
+                }
+                seq++;
+            }
+        }
+        function toHex(data){
+            var hexValue = data.toString(16);
+            if(hexValue.length%2!=0){
+                return "0"+hexValue;
+            }else
+                return hexValue;
+        }
+        
+        function hexToUTF16(data){
+            return String.fromCharCode(parseInt(data));
+        }
+        // core function
+        function fileAnalyse(data){
+
+            // clearn viable
+            version = ""
+            sectorSize=0;
+            size_directorySector = 0;
+            size_FATSector = 0;
+            location_SectorNumber_firstDirecty = 0;
+            size_DIFATSector = 0;
+            location_SectorNumber_firstDIFAT = 0;
+            hexDirectorySectorSize ="0x";
+            hexFATSectorSize ="0x";
+            hexFirstDirectorySectorLocationNumber ="0x";
+            hexLocationFirstDIFATSector = "0x";
+            hexSizeOfDIFATSector = "0x";
+            hexfirstMiniFATSectorLocation = "0x";
+            hexminiFATSectorSize = "0x";
+            DIFATINFO=[];
+            FATEleArray = [];
+            directorySector=[];
+            directoryEleArray = [];
+            miniFATEleArray=[];
+
+            var sectorSizePoint_1 = 30;
+            var sectorSizePoint_2 = 31;
+            var sectorSizePointRow=sectorSizePoint_1%32;
+            var sectorSizePointClum=parseInt(sectorSizePoint_1/32);
+            var sectorHeader_size = data[sectorSizePointClum];
+            if("00"==toHex(sectorHeader_size[sectorSizePoint_2%32])&&"09"==toHex(sectorHeader_size[sectorSizePoint_1%32])){
+                sectorSize = 512;
+                version="v3.0";
+            }
+            if("00"==toHex(sectorHeader_size[sectorSizePoint_2%32])&&"0c"==toHex(sectorHeader_size[sectorSizePoint_1%32])){
+                sectorSize = 4096;
+                version="v4.0";
+            }
+            //  file info point
+            var DirectorySectorSzie_p = 40;
+            var FATSectorSize_p = 44;
+            var firstDirectorySector_p = 48;
+            var miniStreamCutoffSize_p = 56
+            var firstMiniFATSectorLocation_p = 60;
+            var miniFATSectorSize_p=64;
+            var locationFirestDIFATSector_p = 68;
+            var sizeOfDIFATSector_p = 72;
+            var DIFATArray_p = 76;
+            
+
+            for(var item=3;item>=0;item--){
+                hexDirectorySectorSize = hexDirectorySectorSize + toHex(data[parseInt(DirectorySectorSzie_p/32)][(DirectorySectorSzie_p%32)+item]);
+                hexFATSectorSize = hexFATSectorSize + toHex(data[parseInt(FATSectorSize_p/32)][(FATSectorSize_p%32)+item]);
+                hexFirstDirectorySectorLocationNumber = hexFirstDirectorySectorLocationNumber + toHex(data[parseInt(firstDirectorySector_p/32)][(firstDirectorySector_p%32)+item]);
+                hexLocationFirstDIFATSector = hexLocationFirstDIFATSector + toHex(data[parseInt(locationFirestDIFATSector_p/32)][(locationFirestDIFATSector_p%32)+item]);
+                hexSizeOfDIFATSector = hexSizeOfDIFATSector + toHex(data[parseInt(sizeOfDIFATSector_p/32)][(sizeOfDIFATSector_p%32)+item]);
+                hexMiniStreamCutOffSize = hexMiniStreamCutOffSize + toHex(data[parseInt(miniStreamCutoffSize_p/32)][(miniStreamCutoffSize_p%32)+item]);
+                hexfirstMiniFATSectorLocation = hexfirstMiniFATSectorLocation + toHex(data[parseInt(firstMiniFATSectorLocation_p/32)][(firstMiniFATSectorLocation_p%32)+item]);
+                hexminiFATSectorSize = hexminiFATSectorSize + toHex(data[parseInt(miniFATSectorSize_p/32)][(miniFATSectorSize_p%32)+item]);
+            }
+            size_directorySector = parseInt(hexDirectorySectorSize);
+            siez_FATSector = parseInt(hexFATSectorSize);
+            location_SectorNumber_firstDirecty = parseInt(hexFirstDirectorySectorLocationNumber);
+            size_DIFATSector = parseInt(hexSizeOfDIFATSector);
+            location_SectorNumber_firstDIFAT = parseInt(hexLocationFirstDIFATSector);
+            miniStreamCutOffSize = parseInt(hexMiniStreamCutOffSize);
+            firstMiniFATSectorLocation = parseInt(hexfirstMiniFATSectorLocation);
+            miniFATSectorSize = parseInt(hexminiFATSectorSize);
+
+            
+            //DIFAT
+            var DIFAT_p = 76;
+            for(var item=0;item<435;item=item+4){
+                var hexNumber = "0x";
+                hexNumber = hexNumber + toHex(data[parseInt((DIFAT_p+item+3)/32)][((DIFAT_p+item+3)%32)]);
+                hexNumber = hexNumber + toHex(data[parseInt((DIFAT_p+item+2)/32)][((DIFAT_p+item+2)%32)]);
+                hexNumber = hexNumber + toHex(data[parseInt((DIFAT_p+item+1)/32)][((DIFAT_p+item+1)%32)]);
+                hexNumber = hexNumber + toHex(data[parseInt((DIFAT_p+item+0)/32)][((DIFAT_p+item+0)%32)]);
+                if( "0xFFFFFFFE"==hexNumber||
+                    "0xfffffffe"==hexNumber||
+                    "0xFFFFFFFF"==hexNumber||
+                    "0xffffffff"==hexNumber){
+                    break;
+                }
+                DIFATINFO[DIFATINFO.length]=parseInt(hexNumber);
+            }
+            /*
+                FAT_ELE = {
+                    seq: int 0,
+                    point = position,
+                    type = type,
+                    hexinfo = ,
+                    nextEle = int 0
+                }
+            */
+            
+            
+            //FAT Sector
+            for(var item=0;item<DIFATINFO.length;item++){
+                var FATSector_location = DIFATINFO[item];
+                var point = (FATSector_location + 1) * sectorSize;
+                for(var item2=0;item2<(sectorSize-1);item2=item2+4){
+                    var FAT_ELE={};
+                    FAT_ELE.seq= parseInt(((item * sectorSize)+item2)/4);
+                    FAT_ELE.nextEle = null;
+                    var hexNumber = "0x";
+                    hexNumber = hexNumber + toHex(data[parseInt((point+item2+3)/32)][((point+item2+3)%32)]);
+                    hexNumber = hexNumber + toHex(data[parseInt((point+item2+2)/32)][((point+item2+2)%32)]);
+                    hexNumber = hexNumber + toHex(data[parseInt((point+item2+1)/32)][((point+item2+1)%32)]);
+                    hexNumber = hexNumber + toHex(data[parseInt((point+item2+0)/32)][((point+item2+0)%32)]);
+                    if( "0xFFFFFFFC"==hexNumber||
+                        "0xfffffffc"==hexNumber){
+                        FAT_ELE.type="DIFAT Sectors (DIFSECT = 0xFFFFFFC), which are not chained in the same way as the others.";                        
+                    }else
+                    if( "0xFFFFFFFD"==hexNumber||
+                        "0xfffffffd"==hexNumber){
+                        FAT_ELE.type="Sectors that contain storage for FAT sectors (FATSECT = 0xFFFFFFFD).";                    
+                    }else
+                    if( "0xFFFFFFFE"==hexNumber||
+                        "0xfffffffe"==hexNumber){
+                        FAT_ELE.type="Chain terminators (ENDOFCHAIN = 0xFFFFFFFE).";                    
+                    }else
+                    if( "0xFFFFFFFF"==hexNumber||
+                        "0xffffffff"==hexNumber){
+                        FAT_ELE.type="Free sectors (FREESECT = 0xFFFFFFFF).";                    
+                    }else
+                        FAT_ELE.nextEle = parseInt(hexNumber);
+                    FAT_ELE.hexinfo=hexNumber;
+                    FATEleArray[FATEleArray.length] = FAT_ELE;
+                    
+
+                }
+            }
+
+            /*
+                directory ele = {
+                    name(64bytes) = "",
+                    nameLength(2bytes) = int,
+                    ObjectType(1byte) = ,
+                    coloFlag(1byte) = ,
+                    LeftSlibingID(4bytes) = ,
+                    RightSlibingID(4bytes) = ,
+                    ChildID(4bytes) = ,
+                    CLSID(16bytes) = ,
+                    stateBits(4bytes) = ,
+                    createTime(8bytes) = ,
+                    ModifiedTime(8bytes) = ,
+                    startingSector(4bytes) = ,
+                    StreamSize(8 bytes) = 
+                }
+            */
+            //  Directory sector
+            var DirectorySector_point = parseInt(hexFirstDirectorySectorLocationNumber);
+            
+            while(true){
+                var tempEle = FATEleArray[DirectorySector_point];
+                directorySector[directorySector.length] = tempEle;
+                DirectorySector_point = tempEle.nextEle;
+                
+                for(var item=0;item<(sectorSize-1);item=item+128){
+                    var point = ( tempEle.seq + 1) * sectorSize;
+                    var hexNumber = "";
+                    var directoryEle = {};
+                    var item2_add = 0;
+                    
+                    var nameCode = [];
+                    var name = "";
+                    for(item2=63;item2>=0;item2=item2-2){
+                        var hexCharCode = "0x";
+                        hexCharCode = hexCharCode + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                        hexCharCode = hexCharCode + toHex(data[parseInt((point+item+item2+item2_add-1)/32)][((point+item+item2+item2_add-1)%32)]);
+                        nameCode[nameCode.length] = hexCharCode;
+                        name = hexToUTF16(hexCharCode) + name;
+                    }
+                    item2_add = item2_add + 64;            
+                    directoryEle.name = name.split("");
+                    directoryEle.nameCode = nameCode;
+
+                    hexNumber = "0x";
+                    for(item2=1;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 2;
+                    directoryEle.nameLength = hexNumber;
+                    directoryEle.nameLengthInt = parseInt(hexNumber);
+                    var nameLength = parseInt((parseInt(hexNumber)/2 -1));
+                    if(nameLength>=0)
+                        directoryEle.name.length = nameLength;
+                    else
+                        directoryEle.name.length = 0;
+
+                    hexNumber = "0x";
+                    for(item2=0;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    if("0x00"==hexNumber)
+                        directoryEle.Type = "Unknown or unallocated";
+                    if("0x01"==hexNumber)
+                        directoryEle.Type = "Storage Object";
+                    if("0x02"==hexNumber)
+                        directoryEle.Type = "Stream Object";
+                    if("0x05"==hexNumber)
+                        directoryEle.Type = "Root Storage Object";
+                    item2_add = item2_add + 1;
+                    directoryEle.ObjectType = hexNumber;                
+
+                    hexNumber = "0x";
+                    for(item2=0;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 1;
+                    directoryEle.coloFlag = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=3;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 4;
+                    directoryEle.LeftSlibingID = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=3;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 4;
+                    directoryEle.RightSlibingID = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=3;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 4;
+                    directoryEle.ChildID = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=15;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 16;
+                    directoryEle.CLSID = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=3;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 4;
+                    directoryEle.stateBits = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=7;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 8;
+                    directoryEle.createTime = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=7;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 8;
+                    directoryEle.ModifiedTime = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=3;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 4;
+                    directoryEle.startingSector = hexNumber;
+
+                    hexNumber = "0x";
+                    for(item2=7;item2>=0;item2--){
+                        hexNumber = hexNumber + toHex(data[parseInt((point+item+item2+item2_add)/32)][((point+item+item2+item2_add)%32)]);
+                    }
+                    item2_add = item2_add + 8;
+                    directoryEle.StreamSize = hexNumber;
+                    directoryEle.size_int=parseInt(hexNumber);
+                    if("0x05"==directoryEle.ObjectType){
+                        directoryEle.storeIn="null, is root directory etiry."; 
+                    }else{
+                        if(parseInt(hexNumber)<miniStreamCutOffSize){
+                            directoryEle.storeIn="miniStream";                        
+                        }else{
+                            directoryEle.storeIn="Stream";
+                        }
+                    }
+                    
+                    directoryEle.seq=directoryEleArray.length;
+                    directoryEleArray[directoryEleArray.length] = directoryEle;
+                }
+                
+                var hexNumber = tempEle.hexinfo;
+                if( "0xFFFFFFFC"==hexNumber||
+                    "0xfffffffc"==hexNumber||
+                    "0xFFFFFFFD"==hexNumber||
+                    "0xfffffffd"==hexNumber||
+                    "0xFFFFFFFE"==hexNumber||
+                    "0xfffffffe"==hexNumber||
+                    "0xFFFFFFFF"==hexNumber||
+                    "0xffffffff"==hexNumber)
+                    {
+                        break;                    
+                    }
+            }            
+
+            //  mini FAT            
+            if( hexfirstMiniFATSectorLocation!="0xFFFFFFFE"||
+                hexfirstMiniFATSectorLocation!="0xfffffffe"){
+                var miniFATlocationSectorPArray=[];
+                var pinter = parseInt(hexfirstMiniFATSectorLocation);
+                if(miniFATSectorSize==1){
+                    miniFATlocationSectorPArray[miniFATlocationSectorPArray.length]=pinter;
+                }
+                else{
+                    // more than one
+                    while(true){
+                        miniFATlocationSectorPArray[miniFATlocationSectorPArray.length]=pinter;                
+                        if(null!=FATEleArray[pinter].nextEle){
+                            pinter = FATEleArray[pinter].nextEle;
+                            miniFATlocationSectorPArray[miniFATlocationSectorPArray.length]=pinter;
+                        }else{
+                            break;
+                        }
+                    }
+                }
+                for(var item=0;item<miniFATSectorSize;item++){
+                    for(var item2=0;item2<sectorSize-1;item2=item2+4){
+                        var point2 = miniFATlocationSectorPArray[item];
+                        point2 = (point2+1) * sectorSize;
+                        var hexNumber = "0x";
+                        hexNumber = hexNumber + toHex(data[parseInt((point2+item2+3)/32)][((point2+item2+3)%32)]);
+                        hexNumber = hexNumber + toHex(data[parseInt((point2+item2+2)/32)][((point2+item2+2)%32)]);
+                        hexNumber = hexNumber + toHex(data[parseInt((point2+item2+1)/32)][((point2+item2+1)%32)]);
+                        hexNumber = hexNumber + toHex(data[parseInt((point2+item2+0)/32)][((point2+item2+0)%32)]);
+                        miniFATEleArray[miniFATEleArray.length] = parseInt(hexNumber);
+                    }
+                }
+            }
+        }
+
+            /*
+                directory ele = {
+                    name(64bytes) = "",
+                    nameLength(2bytes) = int,
+                    ObjectType(1byte) = ,
+                    coloFlag(1byte) = ,
+                    LeftSlibingID(4bytes) = ,
+                    RightSlibingID(4bytes) = ,
+                    ChildID(4bytes) = ,
+                    CLSID(16bytes) = ,
+                    stateBits(4bytes) = ,
+                    createTime(8bytes) = ,
+                    ModifiedTime(8bytes) = ,
+                    startingSector(4bytes) = ,
+                    StreamSize(8 bytes) = 
+                }
+            */
+        function readDataFromFileSector(data_directoryEntiry){
+            if("0x02"!=data_directoryEntiry.ObjectType){
+                return null;
+            }
+            var dataSize = parseInt(data_directoryEntiry.StreamSize);
+            if(dataSize<miniStreamCutOffSize){
+                //data in mini stream
+                var sector_p = parseInt(data_directoryEntiry.startingSector);
+                var sector_array = [];
+                sector_array[sector_array.length] = sector_p;
+                while(true){
+                    sector_p = parseInt(miniFATEleArray[sector_p]);                
+                    if("fffffffe"==sector_p.toString(16)||"ffffffff"==sector_p.toString(16)){
+                        break;
+                    }
+                    sector_array[sector_array.length] = sector_p;
+                }
+                // find root entiry
+                var miniStreamSectorArray=[];
+                var sector_p2 = null;
+                for(var item=0;item<directoryEleArray.length;item++){
+                    if("0x05"==directoryEleArray[item].ObjectType){
+                        sector_p2 = directoryEleArray[item].startingSector;
+                        miniStreamSectorArray[miniStreamSectorArray.length] = parseInt(sector_p2);
+                    }                    
+                }
+                var miniSection=[];
+                while(null!=sector_p2){
+                    for(var item=0;item<sectorSize;item=item+64){
+                        var minStreamTemp=[];
+                        for(var item2=0;item2<64;item2++){
+                            var p1=(parseInt(sector_p2)+1)*sectorSize + item + item2;
+                            minStreamTemp[minStreamTemp.length] = OhexArray[parseInt(p1/32)][p1%32];
+                        }
+                        miniSection[miniSection.length] = minStreamTemp;
+                    }
+                    if( "0xFFFFFFFE"==FATEleArray[parseInt(sector_p2)].hexinfo||
+                        "0xfffffffe"==FATEleArray[parseInt(sector_p2)].hexinfo){
+                        break;
+                    }
+                    sector_p2 = parseInt(FATEleArray[parseInt(sector_p2)].nextEle);
+                    miniStreamSectorArray[miniStreamSectorArray.length] = sector_p2 + 1;                    
+                }
+                var strartLocation =  data_directoryEntiry.startingSector;
+                var returnData = [];
+                var p2 = parseInt(strartLocation);
+                while(true){
+                    for(var dataItem=0;dataItem<64;dataItem++){
+                        returnData[returnData.length] = miniSection[p2][dataItem];
+                    }
+                    p2 = miniFATEleArray[p2];
+                    if( "FFFFFFFE"==p2.toString(16)||
+                        "fffffffe"==p2.toString(16)||
+                        "FFFFFFFF"==p2.toString(16)||
+                        "ffffffff"==p2.toString(16)){
+                        break;
+                    }
+                }
+                returnData.length = data_directoryEntiry.size_int;
+                return returnData; 
+                
+            }else{
+                //data in normal sector
+                var returnData = [];
+                var sectorPArray=[];
+                var sector_p = parseInt(data_directoryEntiry.startingSector);
+                sectorPArray[sectorPArray.length] = sector_p;
+                var data_sectorTemp = null;
+                while(true){
+                    if(null==FATEleArray[sector_p].nextEle){
+                        break;
+                    }
+                    sector_p = FATEleArray[sector_p].nextEle;
+                    sectorPArray[sectorPArray.length] = sector_p;
+                }
+                for(var item1=0;item1<sectorPArray.length;item1++){
+                    var p1 = sectorPArray[item1];
+                    for(var item2=0;item2<sectorSize;item2++){
+                        var p2 = (p1 + 1) * sectorSize + item2;
+                        returnData[returnData.length] = OhexArray[parseInt(p2/32)][p2%32];
+                    }
+                }
+                returnData.length = data_directoryEntiry.size_int;
+                return returnData; 
+            }
+        }
+        
+        //  VBA project parse function
+        function charCodeArrayToString(Array,start,end){
+            var data = [];
+            for(var item=start;item<=end&&item<Array.length;item++){
+                data[data.length] = String.fromCharCode(Array[item]);
+            }
+            return data.join("");
+        }
+
+        function regExtractInfo(reg,stringData){
+            var regEx = new RegExp(reg,"g");
+            var extract = stringData.match(regEx);
+            return extract;
+        }
+        /*
+            VBA PROJECT
+        */
+        var CR = "\x0D"
+        var DIGIT = "[0-9]";
+        var DQUOTE = "\x22";
+        var HTAB = "\x09";
+        var LF = "\x0A";
+        var SP = "\x20"
+        var VCHAR = "[\x21-\x7E]"
+        var WSP = "[\x20\x09]" ;
+        var NWLN = "(\x0D\x0A|\x0A\x0D)"; 
+        var HEXDIG = "[\x30-\x39,A-F,a-f]";
+        var HEXINT32 = "("+"&H"+ HEXDIG + "{8}"+")";
+        var GUID = "\\x7b"+HEXDIG+"{8}"+"-"+HEXDIG+"{4}"+"-"+HEXDIG+"{4}"+"-"+HEXDIG+"{4}"+"-"+HEXDIG+"{12}"+"\\x7d"
+        //  projectItem
+        var ProjectDocModule = "("+"Document=.{1,31}" +"\x2f" + HEXINT32 + NWLN +")";
+        var ProjectStdModule = "("+"Module=.{1,31}"+ NWLN +")";
+        var ProjectClassModule = "("+"Class=.{1,31}"+ NWLN +")";
+        var ProjectDesignerModule = "("+"BaseClass=.{1,31}"+ NWLN +")";
+        var ProjectPackage = "("+"Package=.{1,31}"+ NWLN +")";
+        var ProjectModule = "("+ProjectDocModule +"?"+ ProjectStdModule +"?"+ ProjectClassModule +"?"+ ProjectDesignerModule +")";
+        var OVBA_PROJECT_projectId = "ID="+DQUOTE+GUID+DQUOTE+NWLN;
+        var OVBA_PROJECT_projectItem = "\r\n(Document|Module|BaseClass|Class|Package)=[^\r\n]+";
+        var OVBA_PROJECT_Name ="(" + "Name=" + DQUOTE + ".{128}" + DQUOTE +")"+ NWLN;
+        
+        function parseOVBA_PROJECT(Array){
+            var strData = charCodeArrayToString(Array,0,Array.length);
+            var projectID = regExtractInfo(OVBA_PROJECT_projectId,strData);
+            var projectItem = regExtractInfo(OVBA_PROJECT_projectItem,strData);
+        }
+
+        function decompressing(Array){
+            var SignatureByte = Array[0];
+            var decompressedArray = [];
+            if(1==SignatureByte){
+                var compressedChunkHander = "0x" + Array[2].toString(16) + Array[1].toString(16);
+                var compressedChunkHander_B = parseInt(compressedChunkHander).toString(2);
+                
+                var compressedChunkHander_H = Array[2].toString(2).padStart(8,"0");
+                var compressedChunkHander_L = Array[1].toString(2).padStart(8,"0");
+                var compressedChunkHander_B = compressedChunkHander_H+compressedChunkHander_L;
+                var chunk_size = 0;
+                var chunk_size_B = "";
+                var CompressedChunkFlag = 0;
+                var CompressedChunkSignature = "0b011";
+
+                CompressedChunkFlag = parseInt(compressedChunkHander_B.charAt(0));
+                var readChunkSignature = "";
+                readChunkSignature ="0b"+ compressedChunkHander_B.charAt(1)+compressedChunkHander_B.charAt(2)+compressedChunkHander_B.charAt(3);
+                if(CompressedChunkSignature!=readChunkSignature){
+                    throw "parse data error";
+                }
+                for(var item=4;item<16;item++){
+                    chunk_size_B = chunk_size_B + compressedChunkHander_B.charAt(item);
+                }
+                //compressed data size
+                chunk_size = parseInt(chunk_size_B,2);
+                if(0==CompressedChunkFlag){
+                    //data not compressed
+                    return Array;
+                }
+                if(1==CompressedChunkFlag){
+                    //data compressed
+                    var compressedDataPointer = 3;
+                    while(compressedDataPointer<(chunk_size+3)){
+                        //token flag
+                        var FlagByte = Array[compressedDataPointer].toString(2).padStart(8,"0");
+                        compressedDataPointer++;
+                        //  decompressing a tokensequence
+                        for(var index=0;index<8;index++){
+                            if(compressedDataPointer<(chunk_size+3)){
+                                
+                                var extrectFlag = [];
+                                for(var f_index=0;f_index<FlagByte.length-index;f_index++){
+                                    extrectFlag[extrectFlag.length] = FlagByte[f_index];
+                                }
+                                extrectFlag = extrectFlag.join("").padStart(8,"0");
+                                extrectFlag = extrectFlag.split("");                                
+                                var flagBit ;
+                                if(extrectFlag[extrectFlag.length-1]==1){
+                                    flagBit=1;
+                                }else{
+                                    flagBit=0;
+                                }
+                                //  decompressing token
+                                if(0==flagBit){
+                                    //  token flag bit == 0
+                                    decompressedArray[decompressedArray.length] = Array[compressedDataPointer];
+                                    compressedDataPointer = compressedDataPointer+1;
+                                }else{
+                                    //  token flag bit == 1
+                                    var copyToken_Hex ="0x"+ Array[compressedDataPointer+1].toString(16).padStart(2,"0") + Array[compressedDataPointer].toString(16).padStart(2,"0");
+                                    var unpackToken = unpackCopyToken(decompressedArray.length,copyToken_Hex);
+                                    var copysource = decompressedArray.length - unpackToken.offset ;
+
+                                    for(var item=1;item<=unpackToken.length;item++){
+                                        decompressedArray[decompressedArray.length] = decompressedArray[copysource + item -1 ];
+                                    }
+                                    
+                                    compressedDataPointer= compressedDataPointer+2;
+                                }
+                            }
+                        }
+
+                    }
+                }
+                return decompressedArray;
+            }else{
+                //  error, the data not compressed
+                return null;
+            }
+        }
+        //  parment: index= DecompressedCurrent - DecompressedChunkStart
+        //  Token = string binary copyToken
+        function unpackCopyToken(index,Token){
+            var helpToken = copyTokenHelp(index);
+            var lengthMask = helpToken.lengthMask.padStart(16,"0");
+            var offsetMask = helpToken.offsetMask.padStart(16,"0");
+            var bitCount = helpToken.bitCount;
+            var token_b = parseInt(Token).toString(2).padStart(16,"0");
+
+            var lengthValue = [];
+            for(var index=0;index<token_b.length;index++){
+                if(token_b.charAt(index)==lengthMask.charAt(index)&&1==token_b.charAt(index)){
+                    lengthValue[lengthValue.length] = 1;
+                }else{                    
+                    lengthValue[lengthValue.length] = 0;
+                }
+            }
+            lengthValue = parseInt(lengthValue.join(""),2) +3;
+
+            var temp1 = [];
+            for(var index=0;index<token_b.length;index++){
+                if(token_b.charAt(index)==offsetMask.charAt(index)&&1==token_b.charAt(index)){
+                    temp1[temp1.length] = 1;
+                }else{                    
+                    temp1[temp1.length] = 0;
+                }
+            }
+
+            var temp2 = 16 - bitCount;
+            
+            var newRightShift = [];
+            for(var index=0;index<temp1.length-temp2;index++){
+                newRightShift[newRightShift.length] = temp1[index]; 
+            }
+            var offset = parseInt(newRightShift.join(""),2)+1;
+
+            return {
+                length:lengthValue,
+                temp1:temp1,
+                temp2:temp2,
+                offset:offset
+            }
+        }
+
+        // parment: index= DecompressedCurrent - DecompressedChunkStart
+        function copyTokenHelp(index){
+            var bitCount=Math.ceil(Math.log(index)/Math.log(2));
+            if(bitCount<4){
+                bitCount=4;
+            }
+            var lengthMask = parseInt("0xFFFF").toString(2).padStart(16,"0");
+            var newLengthMask=[];
+            for(var item=0;item<lengthMask.length - bitCount;item++){
+                newLengthMask[newLengthMask.length]=lengthMask.charAt(item);
+            }
+            lengthMask = newLengthMask.join("").padStart(16,"0");
+            var offsetMask = [];
+            for(var item=0;item<lengthMask.length;item++){
+                if(1==lengthMask.charAt(item))
+                    offsetMask[offsetMask.length] = 0;
+                else
+                    offsetMask[offsetMask.length] = 1;
+            }
+            var MaximumLength = parseInt(lengthMask,2)+3;
+            var returnData = {};
+            returnData.lengthMask = lengthMask;
+            returnData.offsetMask = offsetMask.join("");
+            returnData.MaximumLength = MaximumLength;
+            returnData.bitCount = bitCount;
+
+            return returnData;
+        }
+        
+        function dir_module(array){
+            var InformationRecord={};
+            var ReferencesRecord={};
+            var ModulesRecord={};
+            var offset = 0;
+            //  processing PROJECTINFORMATION
+            var PROJECTSYSKIND_ID_L = array[0];
+            var PROJECTSYSKIND_ID_H = array[1];
+            var PROJECTSYSKIND_ID_hex = "0x" + PROJECTSYSKIND_ID_H.toString(16).padStart(2,'0') + PROJECTSYSKIND_ID_H.toString(16).padStart(2,'0');
+            var PROJECTSYSKIND_Size_1 = array[2];
+            var PROJECTSYSKIND_Size_2 = array[3];
+            var PROJECTSYSKIND_Size_3 = array[4];
+            var PROJECTSYSKIND_Size_4 = array[5];
+            var PROJECTSYSKIND_Size_hex = "0x" + PROJECTSYSKIND_Size_4.toString(16).padStart(2,'0') + PROJECTSYSKIND_Size_3.toString(16).padStart(2,'0') + PROJECTSYSKIND_Size_2.toString(16).padStart(2,'0') + PROJECTSYSKIND_Size_1.toString(16).padStart(2,'0');
+            var PROJECTSYSKIND_SysKind_1 = array[6];
+            var PROJECTSYSKIND_SysKind_2 = array[7];
+            var PROJECTSYSKIND_SysKind_3 = array[8];
+            var PROJECTSYSKIND_SysKind_4 = array[9];
+            var PROJECTSYSKIND_SysKind_des = "";
+            var PROJECTSYSKIND_SysKind_hex = "0x" + PROJECTSYSKIND_SysKind_4.toString(16).padStart(2,'0') + PROJECTSYSKIND_SysKind_3.toString(16).padStart(2,'0') + PROJECTSYSKIND_SysKind_2.toString(16).padStart(2,'0') + PROJECTSYSKIND_SysKind_1.toString(16).padStart(2,'0');
+            if("0x00000000"==PROJECTSYSKIND_SysKind_hex){
+                PROJECTSYSKIND_SysKind_des = "For 16-bit Windows Platforms.";
+            }
+            if("0x00000001"==PROJECTSYSKIND_SysKind_hex){
+                PROJECTSYSKIND_SysKind_des = "For 32-bit Windows Platforms.";
+            }
+            if("0x00000002"==PROJECTSYSKIND_SysKind_hex){
+                PROJECTSYSKIND_SysKind_des = "For Macintosh Platforms.";
+            }
+            if("0x00000003"==PROJECTSYSKIND_SysKind_hex){
+                PROJECTSYSKIND_SysKind_des = "For 64-bit Windows Platforms.";
+            }
+            // PROJECTSYSKIND = 10 bytes        
+            offset = offset + 10;
+            // CompatVersionRecord = 10 bytes (optional)
+            var CompatVersionRecord_signal_L = array[offset];
+            var CompatVersionRecord_signal_H = array[offset + 1];
+            //  CompatVersionRecord_signal_hex Must be 0x004A
+            var CompatVersionRecord_signal_hex = "0x" + CompatVersionRecord_signal_H.toString(16).padStart(2,'0') + CompatVersionRecord_signal_L.toString(16).padStart(2,'0');
+            if("0x004A" == CompatVersionRecord_signal_hex){
+                offset = offset + 10;
+            }
+            // LcidRecord = 10 bytes
+            offset = offset + 10;
+            // LcidInvokeRecord = 10 bytes
+            offset = offset + 10;
+            // CodePageRecord = 8 bytes
+            var CodePageRecord_signal_L = array[offset];
+            var CodePageRecord_signal_H = array[offset + 1];
+            //  CodePageRecord_signal_hex Must be 0x0003
+            var CodePageRecord_signal_hex = "0x" + CodePageRecord_signal_H.toString(16).padStart(2,'0') + CodePageRecord_signal_L.toString(16).padStart(2,'0');
+            offset = offset + 8;
+            // PROJECTNAME = 2 + 4 + size
+            var PROJECTNAME_SizeOfProjectName_1 = array[offset + 2];
+            var PROJECTNAME_SizeOfProjectName_2 = array[offset + 3];
+            var PROJECTNAME_SizeOfProjectName_3 = array[offset + 4];
+            var PROJECTNAME_SizeOfProjectName_4 = array[offset + 5];
+            var PROJECTNAME_SizeOfProjectName_hex = "0x" + PROJECTNAME_SizeOfProjectName_4.toString(16).padStart(2,'0') + PROJECTNAME_SizeOfProjectName_3.toString(16).padStart(2,'0') + PROJECTNAME_SizeOfProjectName_2.toString(16).padStart(2,'0') + PROJECTNAME_SizeOfProjectName_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTNAME_SizeOfProjectName_hex);
+            // PROJECTDOCSTRING = 2 + 4 + size1 + 2 + 4 + size2
+            var PROJECTDOCSTRING_SizeOfDocString_1 = array[offset + 2];
+            var PROJECTDOCSTRING_SizeOfDocString_2 = array[offset + 3];
+            var PROJECTDOCSTRING_SizeOfDocString_3 = array[offset + 4];
+            var PROJECTDOCSTRING_SizeOfDocString_4 = array[offset + 5];
+            var PROJECTDOCSTRING_SizeOfDocString_hex = "0x" + PROJECTDOCSTRING_SizeOfDocString_4.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocString_4.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocString_2.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocString_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTDOCSTRING_SizeOfDocString_hex);
+            var PROJECTDOCSTRING_SizeOfDocStringUnicode_1 = array[offset + 2];
+            var PROJECTDOCSTRING_SizeOfDocStringUnicode_2 = array[offset + 3];
+            var PROJECTDOCSTRING_SizeOfDocStringUnicode_3 = array[offset + 4];
+            var PROJECTDOCSTRING_SizeOfDocStringUnicode_4 = array[offset + 5];
+            var PROJECTDOCSTRING_SizeOfDocStringUnicode_hex = "0x" + PROJECTDOCSTRING_SizeOfDocStringUnicode_4.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocStringUnicode_2.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocStringUnicode_2.toString(16).padStart(2,'0') + PROJECTDOCSTRING_SizeOfDocStringUnicode_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTDOCSTRING_SizeOfDocStringUnicode_hex);
+            // PROJECTHELPFILEPATH = 2 + 4 + size + 2 + 4 + size
+            var PROJECTHELPFILEPATH_SizeOfHelpFile1_1 = array[offset + 2];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile1_2 = array[offset + 3];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile1_3 = array[offset + 4];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile1_4 = array[offset + 5];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile1_hex = "0x" + PROJECTHELPFILEPATH_SizeOfHelpFile1_4.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile1_4.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile1_2.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile1_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTHELPFILEPATH_SizeOfHelpFile1_hex);
+            var PROJECTHELPFILEPATH_SizeOfHelpFile2_1 = array[offset + 2];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile2_2 = array[offset + 3];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile2_3 = array[offset + 4];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile2_4 = array[offset + 5];
+            var PROJECTHELPFILEPATH_SizeOfHelpFile2_hex = "0x" + PROJECTHELPFILEPATH_SizeOfHelpFile2_4.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile2_2.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile2_2.toString(16).padStart(2,'0') + PROJECTHELPFILEPATH_SizeOfHelpFile2_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTHELPFILEPATH_SizeOfHelpFile2_hex);
+            // PROJECTHELPCONTEXT = 10 bytes
+            var PROJECTHELPCONTEXT_single_L = array[offset + 0];
+            var PROJECTHELPCONTEXT_single_H = array[offset + 1];
+            //  PROJECTHELPCONTEXT_single must be 0x0007
+            var PROJECTHELPCONTEXT_single = "0x" + PROJECTHELPCONTEXT_single_H.toString(16).padStart(2,'0') + PROJECTHELPCONTEXT_single_L.toString(16).padStart(2,'0')
+            offset = offset + 10;
+            // PROJECTLIBFLAGS = 10 bytes
+            offset = offset + 10;
+            // PROJECTVERSION = 12 bytes
+            offset = offset + 12;
+            // PROJECTCONSTANTS = 2 + 4 + size + 2 + 4 + size        
+            var PROJECTCONSTANTS_SizeOfConstants_1 = array[offset + 2];
+            var PROJECTCONSTANTS_SizeOfConstants_2 = array[offset + 3];
+            var PROJECTCONSTANTS_SizeOfConstants_3 = array[offset + 4];
+            var PROJECTCONSTANTS_SizeOfConstants_4 = array[offset + 5];
+            var PROJECTCONSTANTS_SizeOfConstants_hex = "0x" + PROJECTCONSTANTS_SizeOfConstants_4.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstants_4.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstants_2.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstants_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTCONSTANTS_SizeOfConstants_hex);
+            var PROJECTCONSTANTS_SizeOfConstantsUnicode_1 = array[offset + 2];
+            var PROJECTCONSTANTS_SizeOfConstantsUnicode_2 = array[offset + 3];
+            var PROJECTCONSTANTS_SizeOfConstantsUnicode_3 = array[offset + 4];
+            var PROJECTCONSTANTS_SizeOfConstantsUnicode_4 = array[offset + 5];
+            var PROJECTCONSTANTS_SizeOfConstantsUnicode_hex = "0x" + PROJECTCONSTANTS_SizeOfConstantsUnicode_4.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstantsUnicode_2.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstantsUnicode_2.toString(16).padStart(2,'0') + PROJECTCONSTANTS_SizeOfConstantsUnicode_1.toString(16).padStart(2,'0');
+            offset = offset + 2 + 4 + parseInt(PROJECTCONSTANTS_SizeOfConstantsUnicode_hex);
+
+
+            // processing PROJECTREFERENCES, an array of REFERENCE
+            // processing array of ReferenceArray , ReferenceArray consist of NameRecord AND ReferenceRecord
+            while(true){
+                //  part01 - NameRecord
+                var REFERENCENAME_ID_L = array[offset];
+                var REFERENCENAME_ID_H = array[offset+1];
+                var REFERENCENAME_ID_Hex = "0x" + REFERENCENAME_ID_H.toString(16).padStart(2,'0') + REFERENCENAME_ID_L.toString(16).padStart(2,'0') ;
+                if("0x0016"!=REFERENCENAME_ID_Hex){
+                    break;
+                }
+                var REFERENCENAME_size_1 = array[offset+2];
+                var REFERENCENAME_size_2 = array[offset+3];
+                var REFERENCENAME_size_3 = array[offset+4];
+                var REFERENCENAME_size_4 = array[offset+5];
+                var REFERENCENAME_size_Hex = "0x" + REFERENCENAME_size_4.toString(16).padStart(2,'0') + REFERENCENAME_size_3.toString(16).padStart(2,'0') + REFERENCENAME_size_2.toString(16).padStart(2,'0') + REFERENCENAME_size_1.toString(16).padStart(2,'0') ;
+                offset = offset + 2 + 4 + parseInt(REFERENCENAME_size_Hex);
+                var REFERENCENAME_SizeOfNameUnicode_1 = array[offset+2];
+                var REFERENCENAME_SizeOfNameUnicode_2 = array[offset+3];
+                var REFERENCENAME_SizeOfNameUnicode_3 = array[offset+4];
+                var REFERENCENAME_SizeOfNameUnicode_4 = array[offset+5];
+                var REFERENCENAME_SizeOfNameUnicode_Hex = "0x" + REFERENCENAME_SizeOfNameUnicode_4.toString(16).padStart(2,'0') + REFERENCENAME_SizeOfNameUnicode_3.toString(16).padStart(2,'0') + REFERENCENAME_SizeOfNameUnicode_2.toString(16).padStart(2,'0') + REFERENCENAME_SizeOfNameUnicode_1.toString(16).padStart(2,'0') ;
+                offset = offset + 2 + 4 + parseInt(REFERENCENAME_SizeOfNameUnicode_Hex);
+                //  part02 - ReferenceRecord
+                var ReferenceRecord_type_L = array[offset];
+                var ReferenceRecord_type_H = array[offset+1];
+                var ReferenceRecord_type = "0x" + ReferenceRecord_type_H.toString(16).padStart(2,'0') + ReferenceRecord_type_L.toString(16).padStart(2,'0');            
+                //  REFERENCEORIGINAL
+                if("0x0033"==ReferenceRecord_type){
+                    offset = offset + 2;
+                    var REFERENCEORIGINAL_size_1 = array[offset + 2];
+                    var REFERENCEORIGINAL_size_2 = array[offset + 3];
+                    var REFERENCEORIGINAL_size_3 = array[offset + 4];
+                    var REFERENCEORIGINAL_size_4 = array[offset + 5];
+                    var REFERENCEORIGINAL_size_hex = "0x" + REFERENCEORIGINAL_size_1.toString(16).padStart(2,'0') + REFERENCEORIGINAL_size_2.toString(16).padStart(2,'0') + REFERENCEORIGINAL_size_3.toString(16).padStart(2,'0') + REFERENCEORIGINAL_size_4.toString(16).padStart(2,'0');
+                    offset = offset + 2 + 4 + parseInt(REFERENCEORIGINAL_size_hex);
+                }
+                ReferenceRecord_type_L = array[offset];
+                ReferenceRecord_type_H = array[offset+1];
+                ReferenceRecord_type = "0x" + ReferenceRecord_type_H.toString(16).padStart(2,'0') + ReferenceRecord_type_L.toString(16).padStart(2,'0');
+                  
+                //  REFERENCECONTROL
+                if("0x002F"==ReferenceRecord_type||"0x002f"==ReferenceRecord_type){
+                    var sizeOfLibidTwiddled_hex_1 = array[offset + 6];
+                    var sizeOfLibidTwiddled_hex_2 = array[offset + 7];
+                    var sizeOfLibidTwiddled_hex_3 = array[offset + 8];
+                    var sizeOfLibidTwiddled_hex_4 = array[offset + 9];
+                    var sizeOfLibidTwiddled_hex = "0x" + sizeOfLibidTwiddled_hex_4.toString(16).padStart(2,'0')+ sizeOfLibidTwiddled_hex_3.toString(16).padStart(2,'0')+ sizeOfLibidTwiddled_hex_2.toString(16).padStart(2,'0')+ sizeOfLibidTwiddled_hex_1.toString(16).padStart(2,'0');
+
+                    offset = offset + 2 + 4 + 4 + parseInt(sizeOfLibidTwiddled_hex) + 4 + 2;
+
+                    // REFERENCENAME -- optional
+                    var REFERENCECONTROL_REFERENCENAME_ID_L = array[offset+10];
+                    var REFERENCECONTROL_REFERENCENAME_ID_H = array[offset+11];
+                    var REFERENCECONTROL_REFERENCENAME_ID_Hex = "0x" + REFERENCECONTROL_REFERENCENAME_ID_H.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_ID_L.toString(16).padStart(2,'0') ;
+                    if("0x0016" == REFERENCECONTROL_REFERENCENAME_ID_Hex){
+                        //  contain REFERENCENAME
+                        var REFERENCECONTROL_REFERENCENAME_size_1 = array[offset+2];
+                        var REFERENCECONTROL_REFERENCENAME_size_2 = array[offset+3];
+                        var REFERENCECONTROL_REFERENCENAME_size_3 = array[offset+4];
+                        var REFERENCECONTROL_REFERENCENAME_size_4 = array[offset+5];
+                        var REFERENCECONTROL_REFERENCENAME_size_Hex = "0x" + REFERENCECONTROL_REFERENCENAME_size_4.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_size_3.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_size_2.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_size_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(REFERENCECONTROL_REFERENCECONTROL_REFERENCENAME_size_Hex);
+                        var REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_1 = array[offset+2];
+                        var REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_2 = array[offset+3];
+                        var REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_3 = array[offset+4];
+                        var REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_4 = array[offset+5];
+                        var REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_Hex = "0x" + REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_4.toString(16).padStart(2,'0') +REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_3.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_2.toString(16).padStart(2,'0') + REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(REFERENCECONTROL_REFERENCENAME_SizeOfNameUnicode_Hex);
+                    }
+                    var SizeOfLibidExtended_hex_1 = array[offset+6];
+                    var SizeOfLibidExtended_hex_2 = array[offset+7];
+                    var SizeOfLibidExtended_hex_3 = array[offset+8];
+                    var SizeOfLibidExtended_hex_4 = array[offset+9];
+                    var SizeOfLibidExtended_hex = "0x" + SizeOfLibidExtended_hex_4.toString(16).padStart(2,'0') + SizeOfLibidExtended_hex_3.toString(16).padStart(2,'0') + SizeOfLibidExtended_hex_2.toString(16).padStart(2,'0') + SizeOfLibidExtended_hex_1.toString(16).padStart(2,'0');
+                    offset = offset + parseInt(SizeOfLibidExtended_hex) + 4 + 2 + 16 + 4 ;
+
+
+                }
+                //  REFERENCEREGISTERED
+                if("0x000D"==ReferenceRecord_type||"0x000d"==ReferenceRecord_type){
+                    var SizeOfLibid_hex_1 = array[offset + 6];
+                    var SizeOfLibid_hex_2 = array[offset + 7];
+                    var SizeOfLibid_hex_3 = array[offset + 8];
+                    var SizeOfLibid_hex_4 = array[offset + 9];
+                    var SizeOfLibid_hex = "0x" + SizeOfLibid_hex_4.toString(16).padStart(2,'0') + SizeOfLibid_hex_3.toString(16).padStart(2,'0') + SizeOfLibid_hex_2.toString(16).padStart(2,'0') + SizeOfLibid_hex_1.toString(16).padStart(2,'0') ;
+
+                    offset = offset + 2 + 4 + 4 + parseInt(SizeOfLibid_hex) + 4 + 2;
+                }
+                //  REFERENCEPROJECT
+                if("0x000E"==ReferenceRecord_type||"0x000e"==ReferenceRecord_type){
+                    
+                    var LibidAbsolute_hex_1 = array[offset + 6];
+                    var LibidAbsolute_hex_2 = array[offset + 7];
+                    var LibidAbsolute_hex_3 = array[offset + 8];
+                    var LibidAbsolute_hex_4 = array[offset + 9];
+                    var LibidAbsolute_hex = "0x" + LibidAbsolute_hex_4.toString(16).padStart(2,'0') + LibidAbsolute_hex_3.toString(16).padStart(2,'0') + LibidAbsolute_hex_2.toString(16).padStart(2,'0') + LibidAbsolute_hex_1.toString(16).padStart(2,'0') ;
+                    offset = offset + 2 + 4 + 4 + parseInt(LibidAbsolute_hex);
+                    var SizeOfLibidRelative_hex_1 = array[offset + 0];
+                    var SizeOfLibidRelative_hex_2 = array[offset + 1];
+                    var SizeOfLibidRelative_hex_3 = array[offset + 2];
+                    var SizeOfLibidRelative_hex_4 = array[offset + 3];
+                    var SizeOfLibidRelative_hex = "0x" + SizeOfLibidRelative_hex_4.toString(16).padStart(2,'0') + SizeOfLibidRelative_hex_3.toString(16).padStart(2,'0') + SizeOfLibidRelative_hex_2.toString(16).padStart(2,'0') + SizeOfLibidRelative_hex_1.toString(16).padStart(2,'0') ;
+                    offset = offset + 4 + parseInt(SizeOfLibidRelative_hex) + 4 + 2;
+                }
+
+            }
+
+            //PROJECTMODULES Record
+            var PROJECTMODULES_single_hex_L = array[offset];
+            var PROJECTMODULES_single_hex_H = array[offset + 1];
+            var PROJECTMODULES_single_hex = "0x" + PROJECTMODULES_single_hex_H.toString(16).padStart(2,'0') + PROJECTMODULES_single_hex_L.toString(16).padStart(2,'0');
+            if("0x000F"!=PROJECTMODULES_single_hex&&"0x000f"!=PROJECTMODULES_single_hex){
+                throw "parse dir error.";
+            }
+            var PROJECTMODULES_modules_size_hex_L = array[offset + 6];
+            var PROJECTMODULES_modules_size_hex_H = array[offset + 7];
+            var PROJECTMODULES_modules_size_hex = "0x" + PROJECTMODULES_modules_size_hex_H.toString(16).padStart(2,'0') + PROJECTMODULES_modules_size_hex_L.toString(16).padStart(2,'0');
+            var PROJECTMODULES_modules_size = parseInt(PROJECTMODULES_modules_size_hex);
+            //  MODULE Record
+            //  MODULE Record start
+            var modulesArray = [];
+            offset = offset + 16;
+            for(var index=0;index<PROJECTMODULES_modules_size;index++){
+                var macrosCodeOffset = null;
+                var unicodeNameString = [];
+                var nameString = [];
+                while(true){
+                    var single_hex_L = array[offset];
+                    var single_hex_H = array[offset + 1];
+                    var single_hex = "0x" + single_hex_H.toString(16).padStart(2,'0') + single_hex_L.toString(16).padStart(2,'0');
+                    if("0x002B"==single_hex||"0x002b"==single_hex){
+                        offset = offset + 2 + 4;
+                        break;                        
+                    }
+                    if("0x0019"==single_hex){
+                        //  MODULENAME
+                        var MODULENAME_SizeOfModuleName_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfModuleName_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfModuleName_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfModuleName_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfModuleName_hex = "0x" + MODULENAME_SizeOfModuleName_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleName_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleName_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleName_hex_1.toString(16).padStart(2,'0') ;
+                        //  model name
+                        var nameSize = parseInt(MODULENAME_SizeOfModuleName_hex);                    
+                        for(var charIndex=0;charIndex<nameSize;charIndex++){
+                            nameString [nameString.length]=String.fromCharCode(array[offset+6+charIndex]); 
+                        }
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfModuleName_hex);
+                    }
+                    if("0x0047"==single_hex){
+                        //  MODULENAMEUNICODE
+                        var MODULENAMEUNICODE_single_hex_L = array[offset];
+                        var MODULENAMEUNICODE_single_hex_H = array[offset + 1];
+                        var MODULENAMEUNICODE_single_hex = "0x" + MODULENAMEUNICODE_single_hex_H.toString(16).padStart(2,'0') + MODULENAMEUNICODE_single_hex_L.toString(16).padStart(2,'0');
+                        var MODULENAME_SizeOfModuleNameUnicode_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfModuleNameUnicode_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfModuleNameUnicode_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfModuleNameUnicode_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfModuleNameUnicode_hex = "0x" + MODULENAME_SizeOfModuleNameUnicode_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleNameUnicode_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleNameUnicode_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfModuleNameUnicode_hex_1.toString(16).padStart(2,'0') ;
+                        // model unicode name
+                        var unicodeNameSize = parseInt(MODULENAME_SizeOfModuleName_hex);                
+                        for(var charIndex=0;charIndex<unicodeNameSize;charIndex++){
+                            unicodeNameString [unicodeNameString.length]=String.fromCharCode(array[offset+6+charIndex]); 
+                        }
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfModuleNameUnicode_hex);
+                    }
+                    if("0x001A"==single_hex||"0x001a"==single_hex){
+                        //  MODULESTREAMNAME
+                        var MODULESTREAMNAME_single_hex_L = array[offset];
+                        var MODULESTREAMNAME_single_hex_H = array[offset + 1];
+                        var MODULESTREAMNAME_single_hex = "0x" + MODULESTREAMNAME_single_hex_H.toString(16).padStart(2,'0') + MODULESTREAMNAME_single_hex_L.toString(16).padStart(2,'0');
+                        var MODULENAME_SizeOfStreamName_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfStreamName_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfStreamName_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfStreamName_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfStreamName_hex = "0x" + MODULENAME_SizeOfStreamName_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamName_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamName_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamName_hex_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfStreamName_hex);
+
+                        var MODULENAME_SizeOfStreamNameUnicode_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfStreamNameUnicode_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfStreamNameUnicode_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfStreamNameUnicode_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfStreamNameUnicode_hex = "0x" + MODULENAME_SizeOfStreamNameUnicode_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamNameUnicode_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamNameUnicode_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfStreamNameUnicode_hex_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfStreamNameUnicode_hex);
+                    }
+                    if("0x001C"==single_hex||"0x001c"==single_hex){
+                        //  MODULEDOCSTRING
+                        var MODULEDOCSTRING_single_hex_L = array[offset];
+                        var MODULEDOCSTRING_single_hex_H = array[offset + 1];
+                        //  MODULEDOCSTRING_single_hex must be 0x001C
+                        var MODULEDOCSTRING_single_hex = "0x" + MODULEDOCSTRING_single_hex_H.toString(16).padStart(2,'0') + MODULEDOCSTRING_single_hex_L.toString(16).padStart(2,'0');
+                        var MODULENAME_SizeOfDocString_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfDocString_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfDocString_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfDocString_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfDocString_hex = "0x" + MODULENAME_SizeOfDocString_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocString_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocString_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocString_hex_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfDocString_hex);
+
+                        var MODULENAME_SizeOfDocStringUnicode_hex_1 = array[offset + 2];
+                        var MODULENAME_SizeOfDocStringUnicode_hex_2 = array[offset + 3];
+                        var MODULENAME_SizeOfDocStringUnicode_hex_3 = array[offset + 4];
+                        var MODULENAME_SizeOfDocStringUnicode_hex_4 = array[offset + 5];
+                        var MODULENAME_SizeOfDocStringUnicode_hex = "0x" + MODULENAME_SizeOfDocStringUnicode_hex_4.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocStringUnicode_hex_3.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocStringUnicode_hex_2.toString(16).padStart(2,'0') + MODULENAME_SizeOfDocStringUnicode_hex_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + parseInt(MODULENAME_SizeOfDocStringUnicode_hex);
+
+                    }
+                    if("0x0031"==single_hex){
+                        //  MODULEOFFSET
+                        var MODULEOFFSET_single_hex_L = array[offset];
+                        var MODULEOFFSET_single_hex_H = array[offset + 1];
+                        //  MODULEOFFSET_single_hex must be 0x0031
+                        var MODULEOFFSET_single_hex = "0x" + MODULEOFFSET_single_hex_H.toString(16).padStart(2,'0') + MODULEOFFSET_single_hex_L.toString(16).padStart(2,'0');
+                        var MODULENAME_TextOffset_hex_1 = array[offset + 6];
+                        var MODULENAME_TextOffset_hex_2 = array[offset + 7];
+                        var MODULENAME_TextOffset_hex_3 = array[offset + 8];
+                        var MODULENAME_TextOffset_hex_4 = array[offset + 9];
+                        var MODULENAME_TextOffset_hex = "0x" + MODULENAME_TextOffset_hex_4.toString(16).padStart(2,'0') + MODULENAME_TextOffset_hex_3.toString(16).padStart(2,'0') + MODULENAME_TextOffset_hex_2.toString(16).padStart(2,'0') + MODULENAME_TextOffset_hex_1.toString(16).padStart(2,'0') ;
+                        offset = offset + 2 + 4 + 4;
+                        macrosCodeOffset = MODULENAME_TextOffset_hex;
+                    }
+                    if("0x001E"==single_hex||"0x001e"==single_hex){
+                        //  MODULEHELPCONTEXT = 10 bytes
+                        offset = offset + 10;
+                    }
+                    if("0x002C"==single_hex||"0x002c"==single_hex){
+                        //  MODULECOOKIE = 8 bytes
+                        offset = offset + 8;
+                    }
+                    if("0x0021"==single_hex||"0x0022"==single_hex){
+                        //  MODULETYPE = 6 bytes
+                        offset = offset + 6;
+                    }
+                    if("0x0025"==single_hex){
+                        //  MODULEREADONLY = 6 bytes
+                        offset = offset + 6 ;
+                    }
+                    if("0x0028"==single_hex){
+                        //  MODULEPRIVATE = 6 bytes
+                        offset = offset + 6;
+                    }
+                }
+                
+                var ele = {};
+                ele.name = nameString;
+                ele.unicodeName = unicodeNameString;
+                ele.codeOffest = macrosCodeOffset;
+                modulesArray[modulesArray.length] = ele;
+            }
+
+            return modulesArray;
+        }
+        
+        //paraments directoryEleArray 
+        function decompressOVBAdirStreamAndPrease(dataArray){
+            moduleInfo = [];
+            var modules = [];            
+            for(var index=0;index<dataArray.length;index++){
+                if("VBA"==dataArray[index].name.join("")){            
+                    modules = DirectoryElement_listAllSlibing(dataArray[index],dataArray);                    
+                }
+                if("dir"==dataArray[index].name.join("")){            
+                    var compressedData = readDataFromFileSector(dataArray[index]);
+                    var decompressedData = decompressing(compressedData);
+                    moduleInfo = dir_module(decompressedData);
+                }
+            }
+            for(var index=0;index<moduleInfo.length;index++){
+                for(var index2=0;index2<modules.length;index2++){
+                    if(moduleInfo[index].name.join("")==modules[index2].name.join("")){
+                        var cacheAndData = readDataFromFileSector(modules[index2]);
+                        var offest = parseInt(moduleInfo[index].codeOffest);
+                        var data=[];
+                        for(var dataIndex=offest;dataIndex<cacheAndData.length;dataIndex++){
+                            data[data.length]=cacheAndData[dataIndex];
+                        }
+                        moduleInfo[index].data = data;
+                    }
+                }
+            }
+
+        }
+        //  parmanents VBA and directoryEleArray
+        var temp_forDirectoryElement_listAllSlibing = [];
+        function DirectoryElement_listAllSlibing_Loop(dataParent,dataArray){
+            temp_forDirectoryElement_listAllSlibing[temp_forDirectoryElement_listAllSlibing.length] = dataParent;
+            var leftSlibing;
+            if("0xffffffff"==dataParent.LeftSlibingID)
+                leftSlibing = null;
+            else
+                leftSlibing = parseInt(dataParent.LeftSlibingID);
+            var rightSlibing;
+            if("0xffffffff"==dataParent.RightSlibingID)
+                rightSlibing = null;
+            else
+                rightSlibing = parseInt(dataParent.RightSlibingID);
+            if(null!=leftSlibing){
+                DirectoryElement_listAllSlibing_Loop(dataArray[leftSlibing],dataArray);                                
+            }
+            if(null!=rightSlibing){
+                DirectoryElement_listAllSlibing_Loop(dataArray[rightSlibing],dataArray);                
+            }
+        }
+        //  parmanents VBA-child and directoryEleArray
+        function DirectoryElement_listAllSlibing(dataParent,dataArray){
+            temp_forDirectoryElement_listAllSlibing = [];
+            var temp_forDirectoryElement_listAllSlibing_temp = [];
+            var childId=parseInt(dataParent.ChildID);
+            var child=dataArray[childId];
+            DirectoryElement_listAllSlibing_Loop(child,dataArray);
+            temp_forDirectoryElement_listAllSlibing_temp = temp_forDirectoryElement_listAllSlibing;
+            temp_forDirectoryElement_listAllSlibing = [];
+            return temp_forDirectoryElement_listAllSlibing_temp;
+        }
+    </script>
+    <!-- view code -->
+    <script>
+        var ul="<ul>${slibing}</ul>";
+        var li="<li><a onclick='displayDirectryEle(${ID})'>${eleName}</a>${child}</li>";    
+        function queryChildAndSlibing(dataParent,dataArray){
+            var returnData =""+li;
+            returnData = returnData.replace("${eleName}",dataParent.name.join(""));
+            returnData = returnData.replace("${ID}",dataParent.seq);
+            returnData.html="";
+            var leftSlibing;
+            if("0xffffffff"==dataParent.LeftSlibingID)
+                leftSlibing = null;
+            else
+                leftSlibing = parseInt(dataParent.LeftSlibingID);
+            var rightSlibing;
+            if("0xffffffff"==dataParent.RightSlibingID)
+                rightSlibing = null;
+            else
+                rightSlibing = parseInt(dataParent.RightSlibingID);
+            var child;
+            if("0xffffffff"==dataParent.ChildID)
+                child = null;
+            else
+                child = parseInt(dataParent.ChildID);
+            if(null!=leftSlibing){
+                var htmlEle = queryChildAndSlibing(dataArray[leftSlibing],dataArray);
+                returnData = returnData + htmlEle;
+            }
+            if(null!=rightSlibing){
+                var htmlEle = queryChildAndSlibing(dataArray[rightSlibing],dataArray);
+                returnData = returnData + htmlEle;           
+            }
+            if(null!=child){
+                var htmlEle = queryChildAndSlibing(dataArray[child],dataArray);
+                var temp = ul + "";
+                temp = temp.replace("${slibing}",htmlEle);
+                returnData = returnData.replace("${child}",temp);
+            }else{
+                returnData = returnData.replace("${child}","");
+            }
+            
+            return returnData ;
+        }
+
+        function displayDirectryTree(data){
+            var root = null;
+            for(var item=0;item<data.length;item++){
+                if("0x05"==data[item].ObjectType){
+                    root = data[item];
+                    break
+                }
+            }
+            if(null!==root){
+                var struct = queryChildAndSlibing(root,data);
+                document.getElementById("structur_view").innerHTML = struct;
+            }
+        }
+
+        function displayDirectryEle(ID){
+            var data = directoryEleArray[ID];
+            document.getElementById("Entiry_name").innerText = data.name.join("");
+            document.getElementById("Entiry_name_length").innerText = parseInt(data.nameLength/2-1);
+            document.getElementById("Entiry_type").innerText = data.Type;
+            document.getElementById("Entiry_data_size").innerText = data.size_int;
+            if(0==parseInt(data.createTime))
+                document.getElementById("Entiry_create_time").innerText = "null";
+            else
+            document.getElementById("Entiry_create_time").innerText = Date(parseInt(data.createTime)).toString();
+            if(0==parseInt(data.ModifiedTime))
+                document.getElementById("Entiry_modified_time").innerText = "null";
+            else
+                document.getElementById("Entiry_modified_time").innerText = Date(parseInt(data.ModifiedTime)).toString();;
+
+            document.getElementById("Entiry_data_location").innerText = data.startingSector;
+            document.getElementById("Entiry_data_starting").innerText = data.storeIn;
+            document.getElementById("Entiry_seq").innerText = data.seq;
+            
+        }
+
+        function displayMoudles(){
+            var options = "";
+            for(var index=0;index<moduleInfo.length;index++){
+                var temp="<option value="+index+">"+moduleInfo[index].name.join("")+"</option>";
+                options = temp + options;
+            }        
+            document.getElementById("module_array_select").innerHTML = options;
+        }
+    </script>
+    </body>
+</html>
